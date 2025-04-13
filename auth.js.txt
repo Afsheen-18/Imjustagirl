@@ -1,0 +1,58 @@
+// auth.js
+import { auth } from './firebase.js';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js";
+
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+import { db } from './firebase.js';
+
+// ✨ Add after user signs up
+window.signupHandler = () => {
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
+  const username = prompt("Choose your username 🦋"); // or create an input field
+
+  createUserWithEmailAndPassword(auth, email, password)
+    .then(async (userCredential) => {
+      const user = userCredential.user;
+
+      // Save user profile in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        username: username,
+        bio: "just a pastel gurl 🌸",  // default bio
+        email: user.email
+      });
+
+      alert("Signed up and profile created!");
+    })
+    .catch((error) => alert(error.message));
+};
+
+
+// Login
+window.loginHandler = () => {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => alert("Logged in!"))
+    .catch((error) => alert(error.message));
+};
+
+// Logout
+window.logoutHandler = () => {
+  signOut(auth).then(() => alert("Logged out!"));
+};
+
+// Show logout if user is logged in
+onAuthStateChanged(auth, (user) => {
+  const logoutBtn = document.getElementById('logoutButton');
+  if (user) {
+    logoutBtn.style.display = 'block';
+  } else {
+    logoutBtn.style.display = 'none';
+  }
+});
