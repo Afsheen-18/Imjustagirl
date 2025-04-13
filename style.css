@@ -79,13 +79,7 @@ footer {
     opacity: 1;
     transform: translateY(0);
   }
-}
 .dump-post {
-  margin-top: 20px;
-  background-color: #fff5f9;
-  padding: 15px;
-  border-radius: 20px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);.dump-post {
   margin-top: 20px;
   background-color: #fff5f9;
   padding: 15px;
